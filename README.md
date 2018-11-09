@@ -1,8 +1,3 @@
-
-
-                   W E B S M S . C O M   C #   T O O L K I T
-
-
 What is it?
 -----------
 
