@@ -31,5 +31,5 @@ Usage
 NuGet Package
 -------------
 
-  See https://www.nuget.org/packages/WebsmsToolkitCS/
+  Not yet available.
 
