@@ -29,7 +29,7 @@ Usage
   If you want to compile the library yourself, the Microsoft Visual Studio 2017
   solution and project files are included in this package.
 
-  This toolkit requires Microsoft .NET Core 2.1.
+  This toolkit requires Microsoft .NET Core 2.2.
 
 NuGet Package
 -------------
