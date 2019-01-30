@@ -2,6 +2,8 @@ What is it?
 -----------
 
   This is a fork of https://github.com/websms-com/websmscom-csharp converted to dotnet core.
+  
+  As a **new feature**, it is possible to specify a **proxy server** in the SmsClient constructor.
 
   A C# library for using websms.com SMS services. It reduces the complexity of
   network-communication between client and SMS gateway, to help
@@ -10,6 +12,7 @@ What is it?
 Latest Version
 ------------------
 
+  * Version 2.1.0: Optionally a proxy can be specified in the SmsClient constructor.
   * Version 2.0.0: Only the SDK DLL and one example have been ported from the original project.
 
 Usage
