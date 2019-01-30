@@ -21,18 +21,29 @@ namespace Websms
      */
     public class SmsClient
     {
-        
-    	/**
+        /**
+        * library version
+        */
+        private static string VERSION = "2.1.0";
+
+        private readonly string username;
+        private readonly string password;
+        private readonly string url;
+        private readonly IWebProxy proxy;
+
+        /**
          * Constructor
          * @param[in] username User name
          * @param[in] password Password
          * @param[in] url URL
+    	 * @param[in] proxy optionally an IWebProxy
          */
-        public SmsClient(string username, string password, string url)
+        public SmsClient(string username, string password, string url, IWebProxy proxy = null)
         {
             this.username = username;
             this.password = password;
             this.url = url.EndsWith("/") ? url : url + "/";
+            this.proxy = proxy;
         }
 
         /**
@@ -167,22 +178,32 @@ namespace Websms
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.Method = "POST";
                 request.ContentType = "application/json";
+                if (this.proxy != null)
+                {
+                    request.Proxy = this.proxy;
+                }
 
-                string auth = Convert.ToBase64String(Encoding.UTF8.GetBytes(
-                    this.username + ":" + this.password));
+                string auth = Convert.ToBase64String(Encoding.UTF8.GetBytes(username + ":" + password));
                 request.Headers["Authorization"] = "Basic " + auth;
                 request.UserAgent = "dotnet core SDK Client (v"+ VERSION +")";
 
-                Stream stream = request.GetRequestStream();
-                stream.Write(bytes, 0, bytes.Length);
-                stream.Close();
+                using (Stream stream = request.GetRequestStream())
+                {
+                    stream.Write(bytes, 0, bytes.Length);
+                    stream.Close();
+                }
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                stream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(stream);
-                rtn = reader.ReadToEnd();
-                reader.Close();
-                stream.Close();
+                using (Stream stream = response.GetResponseStream())
+                {
+                    if (stream != null)
+                    {
+                        StreamReader reader = new StreamReader(stream);
+                        rtn = reader.ReadToEnd();
+                        reader.Close();
+                        stream.Close();
+                    }
+                }
                 response.Close();
             }
             catch (WebException ex)
@@ -204,14 +225,5 @@ namespace Websms
                
             return rtn;
         }
-
-    	/**
-    	 * library version
-    	 */
-    	private static String VERSION = "2.0.0";
-		
-        private string username;
-        private string password;
-        private string url;
     }
 }
